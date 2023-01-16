@@ -1,8 +1,11 @@
+#include <mutex>
+
 struct Node
 {
     int value;
     Node* next;
     std::mutex* node_mutex;
+    Node(int value) : value(value), next(nullptr), node_mutex(nullptr) {}
 };
 
 class FineGrainedQueue
