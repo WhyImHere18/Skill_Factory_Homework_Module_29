@@ -1,6 +1,3 @@
-﻿// ConsoleApplication1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
 #include <iostream>
 #include <mutex>
 #include <vector>
@@ -10,29 +7,13 @@ struct Node
     int value;
     Node* next;
     std::mutex* node_mutex;
-public:
-    Node();
-    Node(int value) : value(value), next(nullptr), node_mutex(nullptr) {}
 };
 
 class FineGrainedQueue
 {
     Node* head;
     std::mutex* queue_mutex;
-public:
-    FineGrainedQueue() : head(nullptr), queue_mutex(nullptr) {}
-    FineGrainedQueue(Node* node) : queue_mutex(nullptr)
-    {
-        if (!head)
-        {
-            head = new Node();
-            head = node;
-        }
-    }
-    ~FineGrainedQueue() { delete this; }
     void insertIntoMiddle(int value, int position);
-    void show();
-    //void insertIntoMiddle1(int value, int position);
 };
 
 void FineGrainedQueue::insertIntoMiddle(int value, int pos)
@@ -65,29 +46,4 @@ void FineGrainedQueue::insertIntoMiddle(int value, int pos)
     current->next = newNode;
     newNode->next = next;           // связываем список обратно, меняем указатель на узел, следующий после нового узла, на указатель на узел, следующий за current
     current->node_mutex->unlock();  // разблокируем текущий узел. Весь список свободен от блокировок.
-}
-
-void FineGrainedQueue::show()
-{
-    Node* current = head;
-
-    while (current)
-    {
-        std::cout << current->value << " ";
-        current = current->next;
-    }
-}
-
-
-int main()
-{
-    Node n1(1);
-    FineGrainedQueue q(&n1);
-
-    //Node n1(2);
-    //q.insertIntoMiddle(2, 1);
-
-    q.show();
-
-    return 0;
 }
